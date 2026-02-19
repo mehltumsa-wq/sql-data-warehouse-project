@@ -13,6 +13,9 @@ Parameters:
     None. 
 	  This stored procedure does not accept any parameters or return any values.
 
+Scope of Improvement:
+	Parameterize using ROW_NUMBER() ORDER BY clause to allow SCD Type 2 historization if business keys change over time.
+
 Usage Example:
     EXEC Silver.load_silver;
 ===============================================================================
