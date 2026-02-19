@@ -14,7 +14,10 @@ Parameters:
 	  This stored procedure does not accept any parameters or return any values.
 
 Scope of Improvement:
-	Parameterize using ROW_NUMBER() ORDER BY clause to allow SCD Type 2 historization if business keys change over time.
+	1. Parameterize using ROW_NUMBER() ORDER BY clause to allow SCD Type 2 historization if business keys change over time.
+	2. Add explicit handling for sls_quantity = 0 rows in 'crm_sales_details' table by setting sls_price = NULL 
+	   and flagging them, preventing silent incorrect calculations.
+	3. Expand country mapping to a 'dim_country_codes' table for maintainability instead of hard‑coded CASE in 'erp_loc_a101' table.
 
 Usage Example:
     EXEC Silver.load_silver;
