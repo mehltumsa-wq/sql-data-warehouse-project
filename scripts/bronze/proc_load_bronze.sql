@@ -12,6 +12,11 @@ Parameters:
     None. 
 	  This stored procedure does not accept any parameters or return any values.
 
+Scope of Improvement:
+	1.	Currently, the files are loaded from the local system. Implement a direct connection 
+		with cloud sources such as AWS S3.
+	2.	Could add a dynamic filter (variable) for the source paths until the common folders.
+
 Usage Example:
     EXEC bronze.load_bronze;
 ===============================================================================
