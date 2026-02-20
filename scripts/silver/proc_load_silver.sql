@@ -14,10 +14,23 @@ Parameters:
 	  This stored procedure does not accept any parameters or return any values.
 
 Scope of Improvement:
-	1. Parameterize using ROW_NUMBER() ORDER BY clause to allow SCD Type 2 historization if business keys change over time.
+	1. Parameterize using ROW_NUMBER() ORDER BY clause to allow SCD Type 2 historization if business keys change over time. 
+	   However, this is beyond the scope of this project.
 	2. Add explicit handling for sls_quantity = 0 rows in 'crm_sales_details' table by setting sls_price = NULL 
 	   and flagging them, preventing silent incorrect calculations.
 	3. Expand country mapping to a 'dim_country_codes' table for maintainability instead of hard‑coded CASE in 'erp_loc_a101' table.
+	   However, executing this would be challenging as executing the silver layer stored procedure at this stage would 
+	   run into an error as gold.dim_country_codes does not exist yet. Another workaround is needed.
+		Possible SQL script - 
+		INSERT INTO silver.erp_loc_a101 (cid, cntry)
+		SELECT 
+			b.cid, 
+			COALESCE(d.country_name, 'Unknown')
+		FROM bronze.erp_loc_a101 b
+		LEFT JOIN gold.dim_country_codes d ON 
+			    d.country_code = TRIM(b.cntry)                  -- Matches 'US', 'DE'
+			    OR d.full_name = TRIM(b.cntry)                  -- Matches 'United States'
+			    OR d.alt_code1 = TRIM(b.cntry);                 -- Matches 'USA'
 
 Usage Example:
     EXEC Silver.load_silver;
